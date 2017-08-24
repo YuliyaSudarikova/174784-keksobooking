@@ -5,18 +5,18 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-// взять случайный обёект из массива
+// взять случайный объект из массива
 function randItem(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
 };
 
-// генерим неповторяющиеся сторки
+// генерим неповторяющиеся строки
 function getNonRepeatingNumber() {
   return getNonRepeatingNumber.a.pop();
 };
 getNonRepeatingNumber.a = ['01', '02', '03', '04', '05', '06', '07', '08'];
 
-// генерим неповторяющиеся сторки
+// генерим неповторяющиеся строки
 function getNonRepeatingTitle() {
   return getNonRepeatingTitle.a.pop();
 };
@@ -38,7 +38,7 @@ function getNewAddr() {
   return {'x': x, 'y': y}
 };
 
-// выкидываем рандомные овози из корзтны
+// выкидываем рандомные удобства
 function getRandomFeatures() {
   var feat = [
     'wifi',
@@ -57,7 +57,7 @@ function getRandomFeatures() {
 };
 
 
-// генерим итоговый обёект
+// генерим итоговый объект
 function getNewObj() {
   var addr = getNewAddr();
   return {
@@ -84,24 +84,46 @@ function getNewObj() {
   }
 };
 
-var ggg = [];
+var objectFlat = [];
 for (var i = 0; i < 8; i++) {
   obj = getNewObj();
-  ggg.push(obj);
+  objectFlat.push(obj);
+};
+
+//создаем DOM-элементы
+var divPin;
+var fragment = document.createDocumentFragment();
+
+for (var i = 0; i < objectFlat.length; i++) {
+  var newElement = document.createElement('div');
+  divPin.className = 'pin';
+  divPin.style.left = objectFlat[i].addr.x - pin.offsetWidth / 2  + 'px';
+  divPin.style.top = objectFlat[i].addr.y - pin.offsetHeight / 2  + 'px';
+  divPin.innerHTML = '<img src= 'img/avatars/user' + getNonRepeatingNumber() + '.png' class=\"rounded\" width=\"40\" height=\"40\">';
+}
+  return fragment.appendChild(divPin);
+};
+
+//Вставка элементов
+var pinsElem = function (divPin) {
+var mapsLoc = document.querySelector('.tokyo__pin-map');
+var objectLoc = document.createDocumentFragment();
+  for (var i = 0; i < divPin.length; i++) {
+    objectLoc.appendChild(createPin(divPin[i]));
+  }
+  return mapsLoc.appendChild(objectLoc);
+
 };
 
 
-// рисуем бле
-var similarObjectCard = document.querySelection('.tokyo');
+//заполненение шаблона
+var objectTemplate = function (i) {
+var similarObjectsTemplate = document.getElementById('lodge-template').content;
+var objectElement = similarObjectsTemplate.cloneNode(true);
+var offerTitle = document.querySelector('.lodge__title');
+var offerAddress = document.querySelector('.lodge__address');
+var offerTitle = document.querySelector('.lodge__price');
 
-// document.querySelector('#lodge-template').classList.remove('hidden');
-document.getElementById('lodge-template').classList.remove('hidden');
-var similarObjectsTemplate = document.querySelector('#lodge-template').content;
 
-for (var i = 0; i < 4; i++) {
-  var objectsElement = similarObjectsTemplate.cloneNode(true);
 
-  similarListElement.appendChild(objectsElement);
 }
-
-var objectsNames = similarObjectOptions[1](1)(3);
