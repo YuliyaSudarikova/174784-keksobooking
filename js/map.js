@@ -104,7 +104,7 @@ for (var i = 0; i < objectFlat.length; i++) {
   return fragment.appendChild(divPin);
 };
 
-//Вставка элементов
+//Добавление пинов в DOM
 var pinsElem = function (divPin) {
 var mapsLoc = document.querySelector('.tokyo__pin-map');
 var objectLoc = document.createDocumentFragment();
@@ -118,12 +118,36 @@ var objectLoc = document.createDocumentFragment();
 
 //заполненение шаблона
 var objectTemplate = function (i) {
+
 var similarObjectsTemplate = document.getElementById('lodge-template').content;
 var objectElement = similarObjectsTemplate.cloneNode(true);
 var offerTitle = document.querySelector('.lodge__title');
 var offerAddress = document.querySelector('.lodge__address');
-var offerTitle = document.querySelector('.lodge__price');
+var offerPrice = document.querySelector('.lodge__price');
+var offerType = document.querySelector('.lodge__type');
+var offerRoomsGuests = document.querySelector('.lodge__rooms-and-guests')
+var offerCheckinTime = document.querySelector('.lodge__checkin-time')
+var offerFeatures = document.querySelector('.lodge__features')
+var offerDescription = document.querySelector('.lodge__description');
 
+offerTitle.textContent = objectFlat.offer.title;
+offerAddress.textContent = objectFlat.offer.address;
+offerPrice.textContent = objectFlat.offer.price + ' &#8381;/ночь';
+offerType.textContent = objectFlat.offer.type;
+offerRoomsGuests.textContent = objectFlat.offer.rooms ' комнаты для ' + objectFlat.offer.guests + ' гостей';
+offerCheckinTime.textContent = 'Заезд после ' + objectFlat.offer.checkin + ',' + ' выезд до ' + objectFlat.offer.checkout;
+offerDescription.innerHTML = objectFlat.offer.description;
 
+for (var i = 0; i < objectFlat.offer.features.length; i++) {
+  var span = document.createElement('span');
+  span.className = 'feature__image  feature__image--' + objectFlat.offer.features[i];
+  document.querySelector('.lodge__features').appendChild(span);
+};
 
-}
+var avatar = document.querySelector('.dialog__title');
+var img = document.getElementsByTagName('img');//по идее внутри дива .dialog__title 2 тега IMG, второй правда лежит в теге а с другим классом. Как точно найти именно первый??????или все ок?
+img.src = objectFlat.author.avatar;
+
+var dialogPanel = document.querySelector('.dialog_panel');
+dialogPanel.replaceChild(objectElement, dialogPanel);
+};
