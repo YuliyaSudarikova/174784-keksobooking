@@ -7,7 +7,7 @@ function getRandomNumber(min, max) {
 
 // взять случайный объект из массива
 function randItem(arr) {
-  return arr[Math.floor(Math.random() * arr.length)]
+  return arr[getRandomNumber(0, arr.length)];
 };
 
 // генерим неповторяющиеся строки
@@ -16,11 +16,8 @@ function getNonRepeatingNumber() {
 };
 getNonRepeatingNumber.a = ['01', '02', '03', '04', '05', '06', '07', '08'];
 
-// генерим неповторяющиеся строки
-function getNonRepeatingTitle() {
-  return getNonRepeatingTitle.a.pop();
-};
-getNonRepeatingTitle.a = [
+// генерим неповторяющиеся заголовки
+var allTitle = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
   'Огромный прекрасный дворец',
@@ -30,6 +27,19 @@ getNonRepeatingTitle.a = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ];
+function createAd(index) {
+  var ad = {
+      author: {
+        avatar: 'img/avatar/user' + getNonRepeatingNumber(index + 1) + '.png',
+      },
+      features: getRandomFeatures(),
+      title: allTitle[index]
+    }
+    return ad;
+  };
+  for (var i = 0; i < 8; i++) {
+  createAd(i);
+}
 
 // генерим рандомный адрес
 function getNewAddr() {
@@ -38,71 +48,78 @@ function getNewAddr() {
   return {'x': x, 'y': y}
 };
 
-// выкидываем рандомные удобства
+// рандомные удобства
 function getRandomFeatures() {
-  var feat = [
+  var features = [];
+  var feats = [
     'wifi',
     'dishwasher',
     'parking',
     'washer',
     'elevator',
-    'conditioner'
+    'conditioner',
   ];
-  var featureCount = getRandomNumber(0, feat.length);
+  var featureCount = getRandomNumber(0, feats.length);
 
   for (var i = 0; i < featureCount; i++) {
-    var rem = feat.splice(getRandomNumber(0, feat.length), 1);
-  };
-  return feat;
-};
-
+    var randomFeature = feats.splice(getRandomNumber(0, feats.length), 1);
+    features.push(randomFeature);
+  }
+  return features;
+}
 
 // генерим итоговый объект
-function getNewObj() {
-  var addr = getNewAddr();
-  return {
-    'author': {
-      'avatar': 'img/avatars/user' + getNonRepeatingNumber() + '.png',
-    },
-    'offer': {
-      'title': getNonRepeatingTitle(),
-      'price': getRandomNumber(1000, 1000000),
-      'address': addr.x + ', ' + addr.y,
-      'type': randItem(['flat', 'house', 'bungalo']),
-      'rooms': getRandomNumber(1000, 1000000),
-      'guests': getRandomNumber(1, 5),
-      'checkin': randItem(['12:00', '13:00', '14:00']),
-      'checkout': randItem(['12:00', '13:00', '14:00']),
-      'features': getRandomFeatures(),
-      'description': '',
-      'photos': []
-    },
-    'location': {
-      'x': addr.x,
-      'y': addr.y
-    }
+function getNewObj(index) {
+  var objectsList = [];
+
+  for (var i = 0; i < index; i++) {
+    var addr = getNewAddr();
+    var object = {
+        'author': {
+          'avatar': 'img/avatars/user' + getNonRepeatingNumber() + '.png',
+        },
+        'offer': {
+          'title': getNonRepeatingTitle(),
+          'price': getRandomNumber(1000, 1000000),
+          'address': addr.x + ', ' + addr.y,
+          'type': randItem(['flat', 'house', 'bungalo']),
+          'rooms': getRandomNumber(1000, 1000000),
+          'guests': getRandomNumber(1, 5),
+          'checkin': randItem(['12:00', '13:00', '14:00']),
+          'checkout': randItem(['12:00', '13:00', '14:00']),
+          'features': getRandomFeatures(),
+          'description': '',
+          'photos': []
+        },
+        'location': {
+          'x': addr.x,
+          'y': addr.y,
+        }
+    };
+    objectsList[index] = object;
   }
+    return objectsList[]
 };
 
-var objectFlat = [];
-for (var i = 0; i < 8; i++) {
-  obj = getNewObj();
-  objectFlat.push(obj);
-};
+// for (var i = 0; i < 8; i++) {
+//   var objectFlat = [];
+//   obj = getNewObj();
+//   objectFlat.push(objectFlat);
+// };
 
-//создаем DOM-элементы
+
+// создаем DOM-элементы
 var divPin;
 var fragment = document.createDocumentFragment();
 
-for (var i = 0; i < objectFlat.length; i++) {
+for (var i = 0; i < objectsList.length; i++) {
   var newElement = document.createElement('div');
   divPin.className = 'pin';
-  divPin.style.left = objectFlat[i].addr.x - pin.offsetWidth / 2  + 'px';
-  divPin.style.top = objectFlat[i].addr.y - pin.offsetHeight / 2  + 'px';
-  divPin.innerHTML = '<img src= 'img/avatars/user' + getNonRepeatingNumber() + '.png' class=\"rounded\" width=\"40\" height=\"40\">';
+  divPin.style.left = objectsList[i].addr.x - pin.offsetWidth / 2  + 'px';
+  divPin.style.top = objectsList[i].addr.y - pin.offsetHeight / 2  + 'px';
+  divPin.innerHTML = "<img src=\"img/avatars/user" + getNonRepeatingNumber() + ".png\" class=\"rounded\" width=\"40\" height=\"40\">";
 }
-  return fragment.appendChild(divPin);
-};
+  fragment.appendChild(divPin);
 
 //Добавление пинов в DOM
 var pinsElem = function (divPin) {
@@ -116,38 +133,35 @@ var objectLoc = document.createDocumentFragment();
 };
 
 
-//заполненение шаблона
-var objectTemplate = function (i) {
+// заполненение шаблона
+var objectTemplate = function (template, object) {
 
-var similarObjectsTemplate = document.getElementById('lodge-template').content;
-var objectElement = similarObjectsTemplate.cloneNode(true);
-var offerTitle = document.querySelector('.lodge__title');
-var offerAddress = document.querySelector('.lodge__address');
-var offerPrice = document.querySelector('.lodge__price');
-var offerType = document.querySelector('.lodge__type');
-var offerRoomsGuests = document.querySelector('.lodge__rooms-and-guests')
-var offerCheckinTime = document.querySelector('.lodge__checkin-time')
-var offerFeatures = document.querySelector('.lodge__features')
-var offerDescription = document.querySelector('.lodge__description');
+  var avatar = document.querySelector('.dialog__title > img');
+  avatar.src = object.author.avatar;
 
-offerTitle.textContent = objectFlat.offer.title;
-offerAddress.textContent = objectFlat.offer.address;
-offerPrice.textContent = objectFlat.offer.price + ' &#8381;/ночь';
-offerType.textContent = objectFlat.offer.type;
-offerRoomsGuests.textContent = objectFlat.offer.rooms ' комнаты для ' + objectFlat.offer.guests + ' гостей';
-offerCheckinTime.textContent = 'Заезд после ' + objectFlat.offer.checkin + ',' + ' выезд до ' + objectFlat.offer.checkout;
-offerDescription.innerHTML = objectFlat.offer.description;
+  var similarObjectsTemplate = document.getElementById('lodge-template').content.cloneNode(true);
+  var offerTitle = document.querySelector('.lodge__title').textContent = object.offer.title;
+  var offerAddress = document.querySelector('.lodge__address').textContent = object.offer.address;
+  var offerPrice = document.querySelector('.lodge__price').textContent = object.offer.price + ' &#8381;/ночь';
+  var offerType = document.querySelector('.lodge__type').textContent = object.offer.type;
+  var offerRoomsGuests = document.querySelector('.lodge__rooms-and-guests').textContent = object.offer.rooms + ' комнаты для ' + object.offer.guests + ' гостей';
+  var offerCheckinTime = document.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + object.offer.checkin + ',' + ' выезд до ' + object.offer.checkout;
+  var offerFeatures = document.querySelector('.lodge__features')
+  var offerDescription = document.querySelector('.lodge__description').textContent = object.offer.description;
 
-for (var i = 0; i < objectFlat.offer.features.length; i++) {
-  var span = document.createElement('span');
-  span.className = 'feature__image  feature__image--' + objectFlat.offer.features[i];
-  document.querySelector('.lodge__features').appendChild(span);
+  var featuresFragment = getRandomFeatures(object.offer.features);
+  var lodgeFeatures = document.createElement('div');
+  lodgeFeatures.classList.add('lodge__features');
+  lodgeFeatures.appendChild(featuresFragment);
+
+  for (var i = 0; i < object.offer.features.length; i++) {
+    var objectFeature = document.createElement('span');
+    objectFeature.className = 'feature__image  feature__image--' + object.offer.features[i];
+    document.querySelector('.lodge__features').appendChild(span);
+  }
+
+return objectTemplate;
 };
-
-var avatar = document.querySelector('.dialog__title');
-var img = document.getElementsByTagName('img');//по идее внутри дива .dialog__title 2 тега IMG, второй правда лежит в теге а с другим классом. Как точно найти именно первый??????или все ок?
-img.src = objectFlat.author.avatar;
 
 var dialogPanel = document.querySelector('.dialog_panel');
-dialogPanel.replaceChild(objectElement, dialogPanel);
-};
+dialogPanel.replaceChild(objectTemplate, dialogPanel);
