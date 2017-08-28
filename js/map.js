@@ -69,44 +69,37 @@ function getRandomFeatures() {
 }
 
 // генерим итоговый объект
-function getNewObj(index) {
-  var objectsList = [];
-
-  for (var i = 0; i < index; i++) {
-    var addr = getNewAddr();
-    var object = {
-        'author': {
-          'avatar': 'img/avatars/user' + getNonRepeatingNumber() + '.png',
-        },
-        'offer': {
-          'title': getNonRepeatingTitle(),
-          'price': getRandomNumber(1000, 1000000),
-          'address': addr.x + ', ' + addr.y,
-          'type': randItem(['flat', 'house', 'bungalo']),
-          'rooms': getRandomNumber(1000, 1000000),
-          'guests': getRandomNumber(1, 5),
-          'checkin': randItem(['12:00', '13:00', '14:00']),
-          'checkout': randItem(['12:00', '13:00', '14:00']),
-          'features': getRandomFeatures(),
-          'description': '',
-          'photos': []
-        },
-        'location': {
-          'x': addr.x,
-          'y': addr.y,
-        }
-    };
-    objectsList[index] = object;
+function getNewObj() {
+  var addr = getNewAddr();
+  return {
+    'author': {
+      'avatar': 'img/avatars/user' + getNonRepeatingNumber() + '.png',
+    },
+    'offer': {
+      'title': getNonRepeatingTitle(),
+      'price': getRandomNumber(1000, 1000000),
+      'address': addr.x + ', ' + addr.y,
+      'type': randItem(['flat', 'house', 'bungalo']),
+      'rooms': getRandomNumber(1000, 1000000),
+      'guests': getRandomNumber(1, 5),
+      'checkin': randItem(['12:00', '13:00', '14:00']),
+      'checkout': randItem(['12:00', '13:00', '14:00']),
+      'features': getRandomFeatures(),
+      'description': '',
+      'photos': []
+    },
+    'location': {
+      'x': addr.x,
+      'y': addr.y
+    }
   }
-    return objectsList[]
 };
 
-// for (var i = 0; i < 8; i++) {
-//   var objectFlat = [];
-//   obj = getNewObj();
-//   objectFlat.push(objectFlat);
-// };
-
+var objectList = [];
+for (var i = 0; i < 8; i++) {
+  obj = getNewObj();
+  objectList.push(obj);
+}
 
 // создаем DOM-элементы
 var divPin;
@@ -117,9 +110,10 @@ for (var i = 0; i < objectsList.length; i++) {
   divPin.className = 'pin';
   divPin.style.left = objectsList[i].addr.x - pin.offsetWidth / 2  + 'px';
   divPin.style.top = objectsList[i].addr.y - pin.offsetHeight / 2  + 'px';
-  divPin.innerHTML = "<img src=\"img/avatars/user" + getNonRepeatingNumber() + ".png\" class=\"rounded\" width=\"40\" height=\"40\">";
+  divPin.innerHTML = '<img src=\"img/avatars/user" + getNonRepeatingNumber() + ".png\" class=\"rounded\" width=\"40\" height=\"40\">';
 }
   fragment.appendChild(divPin);
+
 
 //Добавление пинов в DOM
 var pinsElem = function (divPin) {
@@ -129,9 +123,6 @@ var objectLoc = document.createDocumentFragment();
     objectLoc.appendChild(createPin(divPin[i]));
   }
   return mapsLoc.appendChild(objectLoc);
-
-};
-
 
 // заполненение шаблона
 var objectTemplate = function (template, object) {
