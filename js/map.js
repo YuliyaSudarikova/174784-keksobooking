@@ -1,7 +1,7 @@
 "use strict";
 //генерим случайное число
 function getRandomNumber(min, max) {
-  getRandomNumber.x =0;
+  getRandomNumber.x = 0;
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
@@ -14,6 +14,7 @@ function randItem(arr) {
 function getNonRepeatingNumber() {
   return getNonRepeatingNumber.a.pop();
 };
+
 getNonRepeatingNumber.a = ['01', '02', '03', '04', '05', '06', '07', '08'];
 
 // генерим неповторяющиеся заголовки
@@ -25,7 +26,7 @@ var allTitle = [
   'Красивый гостевой домик',
   'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря',
-  'Неуютное бунгало по колено в воде'
+  'Неуютное бунгало по колено в воде',
 ];
 function createAd(index) {
   var ad = {
@@ -33,10 +34,11 @@ function createAd(index) {
         avatar: 'img/avatar/user' + getNonRepeatingNumber(index + 1) + '.png',
       },
       features: getRandomFeatures(),
-      title: allTitle[index]
-    }
+      title: allTitle[index],
+    };
     return ad;
   };
+
   for (var i = 0; i < 8; i++) {
   createAd(i);
 }
@@ -45,8 +47,8 @@ function createAd(index) {
 function getNewAddr() {
   var x = getRandomNumber(300, 900);
   var y = getRandomNumber(100, 500);
-  return {'x': x, 'y': y}
-};
+  return { 'x': x, 'y': y };
+}
 
 // рандомные удобства
 function getRandomFeatures() {
@@ -65,6 +67,7 @@ function getRandomFeatures() {
     var randomFeature = feats.splice(getRandomNumber(0, feats.length), 1);
     features.push(randomFeature);
   }
+
   return features;
 }
 
@@ -86,13 +89,13 @@ function getNewObj() {
       'checkout': randItem(['12:00', '13:00', '14:00']),
       'features': getRandomFeatures(),
       'description': '',
-      'photos': []
+      'photos': [],
     },
     'location': {
       'x': addr.x,
       'y': addr.y
-    }
-  }
+    },
+  };
 };
 
 var objectList = [];
@@ -112,6 +115,7 @@ for (var i = 0; i < objectsList.length; i++) {
   divPin.style.top = objectsList[i].addr.y - pin.offsetHeight / 2  + 'px';
   divPin.innerHTML = '<img src=\"img/avatars/user" + getNonRepeatingNumber() + ".png\" class=\"rounded\" width=\"40\" height=\"40\">';
 }
+
   fragment.appendChild(divPin);
 
 
@@ -122,7 +126,9 @@ var objectLoc = document.createDocumentFragment();
   for (var i = 0; i < divPin.length; i++) {
     objectLoc.appendChild(createPin(divPin[i]));
   }
+
   return mapsLoc.appendChild(objectLoc);
+};
 
 // заполненение шаблона
 var objectTemplate = function (template, object) {
@@ -151,7 +157,7 @@ var objectTemplate = function (template, object) {
     document.querySelector('.lodge__features').appendChild(span);
   }
 
-return objectTemplate;
+  return objectTemplate;
 };
 
 var dialogPanel = document.querySelector('.dialog_panel');
