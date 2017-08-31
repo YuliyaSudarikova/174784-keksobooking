@@ -1,6 +1,6 @@
 'use strict';
 
-// генерим случайное число
+// сгенерить случайное число
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -31,7 +31,7 @@ function getRandomFeatures() {
   return features;
 }
 
-// генерим рандомный адрес
+// сгенерить рандомный адрес
 function getNewAddr() {
   var x = getRandomNumber(300, 900);
   var y = getRandomNumber(100, 500);
@@ -39,7 +39,7 @@ function getNewAddr() {
 }
 
 function createAd(index) {
-  // генерим неповторяющиеся заголовки
+  // сгенерить объект
   var allTitle = [
     'Большая уютная квартира',
     'Маленькая неуютная квартира',
@@ -76,13 +76,14 @@ function createAd(index) {
   return ad;
 }
 
+// создать массив объектов
 var ads = [];
 for (var i = 0; i < 8; i++) {
   var ad = createAd(i);
   ads.push(ad);
 }
 
-// создаем DOM-элементы
+// создать pin
 var fragment = document.createDocumentFragment();
 
 for (var y = 0; y < ads.length; y++) {
@@ -95,9 +96,11 @@ for (var y = 0; y < ads.length; y++) {
   fragment.appendChild(pin);
 }
 
+// создать pin на карте
 var map = document.querySelector('.tokyo__pin-map');
 map.appendChild(fragment);
 
+// заполнение шаблона
 function getTemplate(n) {
 
   var lodgeTemplate = document.querySelector('#lodge-template');
@@ -110,7 +113,7 @@ function getTemplate(n) {
   lodge.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + n.offer.checkin + ', ' + 'выезд до ' + n.offer.checkout;
 
   var lodgeFeatures = lodge.querySelector('.lodge__features');
-  for (var i = 0; i < n.offer.features.length; i++) {
+  for (var t = 0; t < n.offer.features.length; t++) {
     var spanIconFeauture = document.createElement('span');
     spanIconFeauture.classList.add('feature__image', 'feature__image--' + n.offer.features[i]);
 
