@@ -115,7 +115,7 @@ function getTemplate(n) {
   var lodgeFeatures = lodge.querySelector('.lodge__features');
   for (var t = 0; t < n.offer.features.length; t++) {
     var spanIconFeauture = document.createElement('span');
-    spanIconFeauture.classList.add('feature__image', 'feature__image--' + n.offer.features[i]);
+    spanIconFeauture.classList.add('feature__image', 'feature__image--' + n.offer.features[t]);
 
     lodgeFeatures.appendChild(spanIconFeauture);
   }
