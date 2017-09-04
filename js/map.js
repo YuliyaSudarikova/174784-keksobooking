@@ -137,25 +137,31 @@ var adOpen = document.querySelector('.pin');
 var dialogContentShow = document.querySelector('.dialog');
 var tokioPinMap = document.querySelector('.tokyo__pin-map');
 var clickedElement = null;
+// нажатие enter
+var openPopupEnterPress = function (evt) {
+  if (evt.keyCode === KEYENTER) {
+    adOpenHeandler();
+  }
+};
+var adOpenHeandler = function () {
 
-// var adClickHeandler = function () {
-// // нажатие enter
-//   // var openPopupEscPress = function (evt) {
-//   //   if (evt.keyCode === KEYESC) {
-//   //     adCloseHendler();
-//   //   }
-//   for (var i = 0; i < adOpen.length; i++) {
-//     adOpen[i].addEventListener('click', adClickHeandler);
-//   }
-//
-//   if (clickedElement) {
-//     clickedElement.classList.remove('pin--active');
-//   }
-//
-//   dialogContentShow.setAttribute('display', 'block');
-//   adOpen.classList.add('pin--active');
-// };
-// adOpen.addEventListener('click', adClickHeandler, true);
+  // for (var i = 0; i < adOpen.length; i++) {
+  //   adOpen[i].addEventListener('click', function () {
+  //     adOpenHeandler();
+  //   });
+  //
+  // if (clickedElement) {
+  //   clickedElement.classList.remove('pin--active');
+  // }
+
+  dialogContentShow.setAttribute('display', 'block');
+  adOpen.classList.add('pin--active');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+adOpen.addEventListener('click', function () {
+  adOpenHeandler();
+});
 
 // закрыть объявление
 //
@@ -178,9 +184,10 @@ var adCloseHendler = function () {
     clickedElement.classList.add('pin--active');
   }
   document.removeEventListener('keydown', onPopupEscPress);
+  document.addEventListener('keydown', openPopupEnterPress);
 };
 
-adClose.addEventListener('click', function() {
+adClose.addEventListener('click', function () {
   adCloseHendler();
 });
 // * При показе карточки на карточке должна отображаться актуальная информация о текущем выбранном объекте (заголовок, адрес, цена, время заезда и выезда)*
