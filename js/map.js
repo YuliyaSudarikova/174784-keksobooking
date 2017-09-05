@@ -137,6 +137,27 @@ var tokioPinMap = document.querySelector('.tokyo__pin-map');
 var pinOpen = tokioPinMap.querySelectorAll('.pin');
 var dialogContentShow = document.querySelector('.dialog');
 var clickedElement = null;
+// нажатие enter
+var openPopupEnterPress = function (evt) {
+  if (evt.keyCode === KEYENTER) {
+    adOpenHeandler();
+  }
+};
+var adOpenHeandler = function () {
+
+  // for (var i = 0; i < adOpen.length; i++) {
+  //   adOpen[i].addEventListener('click', function () {
+  //     adOpenHeandler();
+  //   });
+  //
+  // if (clickedElement) {
+  //   clickedElement.classList.remove('pin--active');
+  // }
+
+  dialogContentShow.setAttribute('display', 'block');
+  adOpen.classList.add('pin--active');
+  document.addEventListener('keydown', onPopupEscPress);
+};
 
 var openPinHendler = function (evt) {
   dialogContentShow.setAttribute('display', 'block');
