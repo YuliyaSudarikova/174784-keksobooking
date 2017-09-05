@@ -91,6 +91,7 @@ for (var y = 0; y < ads.length; y++) {
   pin.classList.add('pin');
   pin.style.left = ads[y].location.x - pin.offsetWidth / 2 + 'px';
   pin.style.top = ads[y].location.y - pin.offsetHeight / 2 + 'px';
+  pin.setAttribute('name', 0);
   pin.innerHTML = '<img src="' + ads[y].author.avatar + '" class="rounded" width="40" height="40">';
 
   fragment.appendChild(pin);
@@ -134,30 +135,9 @@ var KEYENTER = 13;
 var KEYESC = 27;
 // открыть объявление
 var tokioPinMap = document.querySelector('.tokyo__pin-map');
-var pinOpen = tokioPinMap.querySelectorAll('.pin');
+var pinOpen = document.querySelectorAll('.pin');
 var dialogContentShow = document.querySelector('.dialog');
 var clickedElement = null;
-// нажатие enter
-var openPopupEnterPress = function (evt) {
-  if (evt.keyCode === KEYENTER) {
-    adOpenHeandler();
-  }
-};
-var adOpenHeandler = function () {
-
-  // for (var i = 0; i < adOpen.length; i++) {
-  //   adOpen[i].addEventListener('click', function () {
-  //     adOpenHeandler();
-  //   });
-  //
-  // if (clickedElement) {
-  //   clickedElement.classList.remove('pin--active');
-  // }
-
-  dialogContentShow.setAttribute('display', 'block');
-  adOpen.classList.add('pin--active');
-  document.addEventListener('keydown', onPopupEscPress);
-};
 
 var openPinHendler = function (evt) {
   dialogContentShow.setAttribute('display', 'block');
@@ -167,7 +147,7 @@ var openPinHendler = function (evt) {
     clickedElement.classList.remove('pin--active');
   }
 
-  clickedElement = evt.target;
+  clickedElement = evt.currentTarget;
   clickedElement.classList.add('pin--active');
 };
 // нажатие enter
@@ -176,11 +156,14 @@ var openPinHendler = function (evt) {
 //     adCloseHendler();
 //   }
 for (var i = 0; i < pinOpen.length; i++) {
-  pinOpen[i].addEventListener('click', openPinHendler);
-}
+  pinOpen[i].addEventListener('click', openPinHendler, true);
+  dialogContentShow.addEventListener('click', function () {
+});
 
+}
 // dialogContentShow.addEventListener('click', openPinHendler);
-// pinOpen.addEventListener('click', openPinHendler);
+// pinOpen.addEventListener('click', openPinHendler, true);
+
 
 // // закрыть объявление
 // //
