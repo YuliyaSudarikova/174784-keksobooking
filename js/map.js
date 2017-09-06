@@ -91,7 +91,7 @@ for (var y = 0; y < ads.length; y++) {
   pin.classList.add('pin');
   pin.style.left = ads[y].location.x - pin.offsetWidth / 2 + 'px';
   pin.style.top = ads[y].location.y - pin.offsetHeight / 2 + 'px';
-  pin.setAttribute('name', 0);
+  pin.setAttribute('name', y);
   pin.innerHTML = '<img src="' + ads[y].author.avatar + '" class="rounded" width="40" height="40">';
 
   fragment.appendChild(pin);
@@ -158,11 +158,11 @@ var openPinHendler = function (evt) {
 for (var i = 0; i < pinOpen.length; i++) {
   pinOpen[i].addEventListener('click', openPinHendler, true);
   dialogContentShow.addEventListener('click', function () {
-});
+  });
 
 }
 // dialogContentShow.addEventListener('click', openPinHendler);
-// pinOpen.addEventListener('click', openPinHendler, true);
+// pinOpen.addEventListener('click', openPinHendler);
 
 
 // // закрыть объявление
