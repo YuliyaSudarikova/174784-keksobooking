@@ -1,4 +1,9 @@
 'use strict';
+var KEYENTER = 13;
+var KEYESC = 27;
+var dialogContentShow = document.querySelector('.dialog');
+var dialogClose = document.querySelector('.dialog__close');
+
 
 // сгенерить случайное число
 function getRandomNumber(min, max) {
@@ -83,24 +88,6 @@ for (var i = 0; i < 8; i++) {
   ads.push(ad);
 }
 
-// создать pin
-var fragment = document.createDocumentFragment();
-
-for (var y = 0; y < ads.length; y++) {
-  var pin = document.createElement('div');
-  pin.classList.add('pin');
-  pin.style.left = ads[y].location.x - pin.offsetWidth / 2 + 'px';
-  pin.style.top = ads[y].location.y - pin.offsetHeight / 2 + 'px';
-  pin.setAttribute('name', y);
-  pin.innerHTML = '<img src="' + ads[y].author.avatar + '" class="rounded" width="40" height="40">';
-
-  fragment.appendChild(pin);
-}
-
-// создать pin на карте
-var map = document.querySelector('.tokyo__pin-map');
-map.appendChild(fragment);
-
 // заполнение шаблона
 function getTemplate(n) {
 
@@ -127,69 +114,82 @@ function getTemplate(n) {
   dialogPanel.parentNode.replaceChild(lodge, dialogPanel);
 
   document.querySelector('.dialog__title > img').setAttribute('src', n.author.avatar);
+  dialogContentShow.classList.remove('hidden');
+  dialogClose.setAttribute('tabindex', 0);
 }
 getTemplate(ads[0]);
 
-// Алерты
-var KEYENTER = 13;
-var KEYESC = 27;
-// открыть объявление
-var tokioPinMap = document.querySelector('.tokyo__pin-map');
-var pinOpen = document.querySelectorAll('.pin');
-var dialogContentShow = document.querySelector('.dialog');
-var clickedElement = null;
-
-var openPinHendler = function (evt) {
-  dialogContentShow.setAttribute('display', 'block');
-  dialogContentShow.getAttribute('data-widget-name');
-
-  if (clickedElement) {
-    clickedElement.classList.remove('pin--active');
+var removeActivPin = function () {
+  var activeElement = document.querySelector('.pin--active');
+  if (activeElement) {
+    activeElement.classList.remove('pin--active');
   }
-
-  clickedElement = evt.currentTarget;
-  clickedElement.classList.add('pin--active');
 };
+
+var clickPinHandler = function (evt) {
+  dialogContentShow.setAttribute('display', 'block');
+
+  removeActivPin();
+
+  var clickedElement = evt.currentTarget;
+  clickedElement.classList.add('pin--active');
+  var index = clickedElement.getAttribute('data-index');
+  getTemplate(ads[index]);
+};
+
 // нажатие enter
-// var openPopupEscPress = function (evt) {
-//   if (evt.keyCode === KEYESC) {
-//     adCloseHendler();
-//   }
-for (var i = 0; i < pinOpen.length; i++) {
-  pinOpen[i].addEventListener('click', openPinHendler, true);
-  dialogContentShow.addEventListener('click', function () {
-  });
+document.addEventListener('keydown', function (evt) {
+  var target = evt.target;
+  if (evt.keyCode === KEYENTER && target.classList.contains('pin')) {
+    var index = target.dataset.index;
+    removeActivPin();
 
+    target.classList.add('pin--active');
+
+    getTemplate(ads[index]);
+  }
+});
+
+// нажатие esc на dialog
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === KEYESC) {
+    dialogContentShow.classList.add('hidden');
+
+    removeActivPin();
+  }
+});
+
+// закрыть объявление
+dialogClose.addEventListener('click', function () {
+  dialogContentShow.classList.add('hidden');
+  removeActivPin();
+});
+
+// закрыть на крестике по enter
+document.addEventListener('keydown', function (evt) {
+  var target = evt.target;
+  if (evt.keyCode === KEYENTER && target.classList.contains('dialog__close')) {
+    dialogContentShow.classList.add('hidden');
+
+    removeActivPin();
+  }
+});
+
+// создать pin
+var fragment = document.createDocumentFragment();
+for (var y = 0; y < ads.length; y++) {
+  var pin = document.createElement('div');
+  pin.classList.add('pin');
+  pin.style.left = ads[y].location.x - pin.offsetWidth / 2 + 'px';
+  pin.style.top = ads[y].location.y - pin.offsetHeight / 2 + 'px';
+  pin.setAttribute('data-index', y);
+  pin.setAttribute('tabindex', 0);
+  pin.innerHTML = '<img src="' + ads[y].author.avatar + '" class="rounded" width="40" height="40">';
+  pin.addEventListener('click', clickPinHandler);
+
+  fragment.appendChild(pin);
 }
-// dialogContentShow.addEventListener('click', openPinHendler);
-// pinOpen.addEventListener('click', openPinHendler);
 
-
-// // закрыть объявление
-// //
-//
-// var adClose = dialogContentShow.querySelector('.dialog__close');
-// // нажатие esc
-// var onPopupEscPress = function (evt) {
-//   if (evt.keyCode === KEYESC) {
-//     adCloseHendler();
-//   }
-// };
-//
-// var adCloseHendler = function () {
-//
-//   dialogContentShow.classList.add('hidden');
-//   adOpen.classList.remove('pin--active');
-//
-//   clickedElement = tokioPinMap.querySelector('.pin--active');
-//   if (clickedElement) {
-//     clickedElement.classList.add('pin--active');
-//   }
-//   document.removeEventListener('keydown', onPopupEscPress);
-// };
-//
-// adClose.addEventListener('click', function() {
-//   adCloseHendler();
-// });
-// // * При показе карточки на карточке должна отображаться актуальная информация о текущем выбранном объекте (заголовок, адрес, цена, время заезда и выезда)*
-// // НЕ СДЕЛАЛА
+// создать pin на карте
+var map = document.querySelector('.tokyo__pin-map');
+map.appendChild(fragment);
