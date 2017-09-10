@@ -1,4 +1,9 @@
 'use strict';
+var KEYENTER = 13;
+var KEYESC = 27;
+var dialogContentShow = document.querySelector('.dialog');
+var dialogClose = document.querySelector('.dialog__close');
+
 
 // сгенерить случайное число
 function getRandomNumber(min, max) {
@@ -83,23 +88,6 @@ for (var i = 0; i < 8; i++) {
   ads.push(ad);
 }
 
-// создать pin
-var fragment = document.createDocumentFragment();
-
-for (var y = 0; y < ads.length; y++) {
-  var pin = document.createElement('div');
-  pin.classList.add('pin');
-  pin.style.left = ads[y].location.x - pin.offsetWidth / 2 + 'px';
-  pin.style.top = ads[y].location.y - pin.offsetHeight / 2 + 'px';
-  pin.innerHTML = '<img src="' + ads[y].author.avatar + '" class="rounded" width="40" height="40">';
-
-  fragment.appendChild(pin);
-}
-
-// создать pin на карте
-var map = document.querySelector('.tokyo__pin-map');
-map.appendChild(fragment);
-
 // заполнение шаблона
 function getTemplate(n) {
 
@@ -126,5 +114,82 @@ function getTemplate(n) {
   dialogPanel.parentNode.replaceChild(lodge, dialogPanel);
 
   document.querySelector('.dialog__title > img').setAttribute('src', n.author.avatar);
+  dialogContentShow.classList.remove('hidden');
+  dialogClose.setAttribute('tabindex', 0);
 }
 getTemplate(ads[0]);
+
+var removeActivPin = function () {
+  var activeElement = document.querySelector('.pin--active');
+  if (activeElement) {
+    activeElement.classList.remove('pin--active');
+  }
+};
+
+var clickPinHandler = function (evt) {
+  dialogContentShow.setAttribute('display', 'block');
+
+  removeActivPin();
+
+  var clickedElement = evt.currentTarget;
+  clickedElement.classList.add('pin--active');
+  var index = clickedElement.getAttribute('data-index');
+  getTemplate(ads[index]);
+};
+
+// нажатие enter
+document.addEventListener('keydown', function (evt) {
+  var target = evt.target;
+  if (evt.keyCode === KEYENTER && target.classList.contains('pin')) {
+    var index = target.dataset.index;
+    removeActivPin();
+
+    target.classList.add('pin--active');
+
+    getTemplate(ads[index]);
+  }
+});
+
+// нажатие esc на dialog
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === KEYESC) {
+    dialogContentShow.classList.add('hidden');
+
+    removeActivPin();
+  }
+});
+
+// закрыть объявление
+dialogClose.addEventListener('click', function () {
+  dialogContentShow.classList.add('hidden');
+  removeActivPin();
+});
+
+// закрыть на крестике по enter
+document.addEventListener('keydown', function (evt) {
+  var target = evt.target;
+  if (evt.keyCode === KEYENTER && target.classList.contains('dialog__close')) {
+    dialogContentShow.classList.add('hidden');
+
+    removeActivPin();
+  }
+});
+
+// создать pin
+var fragment = document.createDocumentFragment();
+for (var y = 0; y < ads.length; y++) {
+  var pin = document.createElement('div');
+  pin.classList.add('pin');
+  pin.style.left = ads[y].location.x - pin.offsetWidth / 2 + 'px';
+  pin.style.top = ads[y].location.y - pin.offsetHeight / 2 + 'px';
+  pin.setAttribute('data-index', y);
+  pin.setAttribute('tabindex', 0);
+  pin.innerHTML = '<img src="' + ads[y].author.avatar + '" class="rounded" width="40" height="40">';
+  pin.addEventListener('click', clickPinHandler);
+
+  fragment.appendChild(pin);
+}
+
+// создать pin на карте
+var map = document.querySelector('.tokyo__pin-map');
+map.appendChild(fragment);
