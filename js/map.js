@@ -193,3 +193,14 @@ for (var y = 0; y < ads.length; y++) {
 // создать pin на карте
 var map = document.querySelector('.tokyo__pin-map');
 map.appendChild(fragment);
+
+// проверка формы
+var addressInput = document.querySelector('#address');
+addressInput.setAttribute('required', 'required');
+var titleInput = document.querySelector('#title');
+titleInput.setAttribute('required', 'required');
+titleInput.setAttribute('value', '');
+if (titleInput.value.lenght < 30 || titleInput.value.lenght > 100) {
+  titleInput.replace('value', '');
+  alert("Длина заголовка должна быть от 30 до 100 символов");
+}
