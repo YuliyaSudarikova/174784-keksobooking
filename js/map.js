@@ -198,6 +198,7 @@ map.appendChild(fragment);
 var addressInput = document.querySelector('#address');
 addressInput.setAttribute('required', 'required');
 var titleInput = document.querySelector('#title');
+
 titleInput.setAttribute('required', 'required');
 titleInput.setAttribute('value', '');
 if (titleInput.value.lenght < 30 || titleInput.value.lenght > 100) {
